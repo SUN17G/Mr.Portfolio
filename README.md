@@ -1,4 +1,4 @@
-# 🚀 Advanced Java Fullstack Developer Portfolio
+# 🚀 Fullstack Developer Portfolio
 
 A modern, responsive portfolio website built with Material UI design principles and advanced web technologies. Features a dynamic dark/light theme, smooth animations, and comprehensive sections showcasing Java Fullstack development skills.
 
@@ -253,12 +253,10 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 📞 **Support**
 
 For questions or support:
-- **Email**: ghorpadesunil2005@gmail.com
-- **GitHub**: [SUN17GH](https://github.com/SUN17GH)
-- **LinkedIn**: [Sunil Ghorpade](https://linkedin.com/in/sunil-ghorpade)
+- **Email**: ghorpadesunil2005@gmail.com
 
 ---
 
 **Built with ❤️ by Sunil Ghorpade**
 
-*Java Fullstack Developer passionate about creating exceptional user experiences*
+*Fullstack Developer passionate about creating exceptional user experiences*
