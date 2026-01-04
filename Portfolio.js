@@ -289,9 +289,12 @@ class PortfolioApp {
 
     // Scroll Animations
     setupScrollAnimations() {
+        // Add scroll-animate class to elements FIRST
+        this.addScrollAnimateClass();
+
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            rootMargin: '0px 0px -100px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -302,13 +305,24 @@ class PortfolioApp {
             });
         }, observerOptions);
 
-        // Observe elements for animation
-        document.querySelectorAll('.scroll-animate').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Add scroll-animate class to elements
-        this.addScrollAnimateClass();
+        // Observe elements for animation AFTER they have the class
+        setTimeout(() => {
+            document.querySelectorAll('.scroll-animate').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Check again after a short delay to catch any missed elements
+            setTimeout(() => {
+                this.checkVisibleElements();
+            }, 200);
+            
+            // Final fallback: Make all elements visible after 2 seconds if still not visible
+            setTimeout(() => {
+                document.querySelectorAll('.scroll-animate:not(.animate)').forEach(el => {
+                    el.classList.add('animate');
+                });
+            }, 2000);
+        }, 100);
     }
 
     addScrollAnimateClass() {
@@ -316,6 +330,20 @@ class PortfolioApp {
         elements.forEach((el, index) => {
             el.classList.add('scroll-animate');
             el.style.animationDelay = `${index * 0.1}s`;
+        });
+        
+        // Immediately check and show elements already in viewport
+        this.checkVisibleElements();
+    }
+    
+    checkVisibleElements() {
+        const elements = document.querySelectorAll('.scroll-animate:not(.animate)');
+        elements.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight + 200 && rect.bottom > -200;
+            if (isVisible) {
+                el.classList.add('animate');
+            }
         });
     }
 
@@ -596,8 +624,15 @@ class PortfolioApp {
 }
 
 // Initialize the application when DOM is loaded
+let portfolioAppInstance;
 document.addEventListener('DOMContentLoaded', () => {
-    new PortfolioApp();
+    portfolioAppInstance = new PortfolioApp();
+    window.portfolioApp = portfolioAppInstance;
+    
+    // Make scrollToSection globally accessible for onclick handlers
+    window.scrollToSection = (sectionId) => {
+        portfolioAppInstance.scrollToSection(sectionId);
+    };
 });
 
 // Add some additional utility functions
@@ -685,12 +720,12 @@ const additionalStyles = `
     }
     
     .navbar.scrolled {
-        background: rgba(255, 255, 255, 0.98);
+        background: rgba(18, 26, 47, 0.85);
         box-shadow: 0 2px 20px var(--shadow-medium);
     }
     
     [data-theme="dark"] .navbar.scrolled {
-        background: rgba(18, 18, 18, 0.98);
+        background: rgba(10, 15, 28, 0.85);
     }
 `;
 
